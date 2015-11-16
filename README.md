@@ -8,14 +8,17 @@ it creates a backup of a single db (from MySQL/MariaDB), compress it and stores 
 
 Requirements
 ------------
-This recipe requires [cron cookbook](https://github.com/chef-cookbooks/cron)
+This recipe requires [cron cookbook](https://github.com/chef-cookbooks/cron).
+
 Just drop
 
 ``` ruby
 cookbook 'cron'
 ```
 
-in your Cheffile and run ``librarian-chef install``
+in your Cheffile and run
+
+``librarian-chef install``
 
 Attributes
 ----------
@@ -105,7 +108,7 @@ Just include `backup` in your node's `run_list`:
 {
   "name":"my_node",
   "run_list": [
-    "recipe[yum_repos]"
+    "recipe[backup]"
   ]
 }
 ```
@@ -115,59 +118,6 @@ and add needed attributes (you can use the structure above)
 Contributing
 ------------
 This recipe is highly not complete, until it will be more completed it's not worth to contribute on it.
-
-License and Authors
--------------------
-License: MIT
-
-Authors:
-
-Simone Dall'Angelo
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-yum_repos Cookbook
-==================
-This cookbook installs EPEL and Remi repos into CentOs 7.
-
-Requirements
-------------
-CentOS 7
-
-Attributes
-----------
-None
-
-Usage
------
-#### yum_repos::default
-Just include `yum_repos` in your node's `run_list`:
-
-```json
-{
-  "name":"my_node",
-  "run_list": [
-    "recipe[yum_repos]"
-  ]
-}
-```
-
-Contributing
-------------
-Need help for testing following best practises, if you can help you are welcome!
 
 License and Authors
 -------------------
