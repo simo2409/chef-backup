@@ -3,7 +3,7 @@ backup Cookbook
 This cookbook setups [backup](https://github.com/backup/backup) to backup
 MySQL/MariaDB database into an S3 bucket.
 
-At the moment this recipe is VERY incomplete and cover only 1 very specific use case:
+At the moment this recipe is VERY incomplete and covers only 1 very specific use case:
 it creates a backup of a single db (from MySQL/MariaDB), compress it and stores it into AWS S3.
 
 Requirements
