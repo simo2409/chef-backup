@@ -1,0 +1,76 @@
+# encoding: utf-8
+
+##
+# Backup Generated: db_backup
+# Once configured, you can run the backup with the following command:
+#
+# $ backup perform -t db_backup [-c <path_to_configuration_file>]
+#
+# For more information about Backup's components, see the documentation at:
+# http://backup.github.io/backup
+#
+Model.new(:db_backup, 'Description for db_backup') do
+  ##
+  # MySQL [Database]
+  #
+  database MySQL do |db|
+    # To dump all databases, set `db.name = :all` (or leave blank)
+    db.name               = "<%= node['backup']['db_name'] %>"
+    db.username           = "<%= node['backup']['db_user'] %>"
+    db.password           = "<%= node['backup']['db_password'] %>"
+    db.host               = "localhost"
+    db.port               = 3306
+    db.socket             = "<%= node['backup']['db_socket'] %>"
+    # Note: when using `skip_tables` with the `db.name = :all` option,
+    # table names should be prefixed with a database name.
+    # e.g. ["db_name.table_to_skip", ...]
+    # db.skip_tables        = ["skip", "these", "tables"]
+    # db.only_tables        = ["only", "these", "tables"]
+    db.additional_options = ["--quick", "--single-transaction"]
+  end
+
+  ##
+  # Amazon Simple Storage Service [Storage]
+  #
+  store_with S3 do |s3|
+    # AWS Credentials
+    s3.access_key_id     = "<%= node['backup']['destination']['access_key_id'] %>"
+    s3.secret_access_key = "<%= node['backup']['destination']['secret_access_key'] %>"
+    # Or, to use a IAM Profile:
+    # s3.use_iam_profile = true
+
+    s3.region            = "<%= node['backup']['destination']['region'] %>"
+    s3.bucket            = "<%= node['backup']['destination']['bucket_name'] %>"
+    s3.path              = "backups"
+    s3.keep              = 5
+    # s3.keep              = Time.now - 2592000 # Remove all backups older than 1 month.
+  end
+
+  ##
+  # Gzip [Compressor]
+  #
+  compress_with Gzip
+
+  ##
+  # Slack [Notifier]
+  #
+  notify_by Slack do |slack|
+    slack.on_success = true
+    slack.on_warning = true
+    slack.on_failure = true
+
+    # The incoming webhook url
+    # https://hooks.slack.com/services/xxxxxxxx/xxxxxxxxx/xxxxxxxxxx
+    slack.webhook_url = "<%= node['backup']['hooks']['slack']['webhook_url'] %>"
+
+    ##
+    # Optional
+    #
+    # The channel to which messages will be sent
+    # slack.channel = 'my_channel'
+    #
+    # The username to display along with the notification
+    # slack.username = 'my_username'
+  end
+
+end
